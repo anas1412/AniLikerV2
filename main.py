@@ -53,7 +53,7 @@ def query_typein():
 
 
 def main():
-    ANILIST_USERNAME = input("AniLikerV2 by anas1412 is a fork of AniLiker by taichikuji\nFor more information check the following repo:\nhttps://www.github.com/anas1412\n\nInput an AniList username!\n> ")
+    ANILIST_USERNAME = input("AniLikerV2 by anas1412 is a fork of AniLiker by taichikuji\nFor more information check the following repo:\nhttps://github.com/anas1412/AniLikerV2\n\nInput an AniList username!\n> ")
 
     query = """
         query ($username: String) {
