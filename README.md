@@ -1,4 +1,4 @@
-# AniLiker: A python autoliker
+# AniLikerV2: A python autoliker
 
 <p align="center"><img src="media/logo.webp" width="150px" /><br/>
 <a href="https://replit.com/@OkWeeb/AniLiker"><img src="https://repl.it/badge/github/taichikuji/aniliker" /></a>
@@ -32,7 +32,7 @@ This python project asks for a username from AniList and gives likes to every po
    ANILIST_TOKEN=""
    ANILIST_CLIENT_ID=""
    ANILIST_CLIENT_SECRET=""
-   ANILIST_REDIRECT_URI=""
+   ANILIST_REDIRECT_URI="https://127.0.0.1"
    ```
 
    If you already have a token, you can ignore the rest.
@@ -42,4 +42,6 @@ This python project asks for a username from AniList and gives likes to every po
 3. Now that you have the .env file ready, you just need to run the project! You have two ways;
    1. You can use pipenv. To do this you just need to install it with `pip install pipenv` and then `pipenv update`. This should prepare a virtual env with all the needed packages.
       After this you need to run `pipenv run main.py` and it should work just fine!
-   2. You can do it manually without pipenv, this means you'll need to install the next packages: - requests - python-dotenv - requests-oauthlib
+   2. Using requirements.txt:
+      Install the required packages with `pip install -r requirements.txt`
+      Run the project with `python main.py` or simply double click on main.py file
