@@ -32,9 +32,6 @@ def run_query(query, variables):
             "authorization": "Bearer " + AL_DATA["ANILIST_TOKEN"],
         },
     )
-
-    print(response)
-
     if response.status_code == 200:
         return response.json()["data"]
     elif response.status_code == 429:
@@ -45,9 +42,6 @@ def run_query(query, variables):
 
 
 def query_typein():
-
-    # This will save a default value onto the dotenv if found empty. Then return the value.
-
     if (os.environ.get("QUERY_OPTIONS") is None) or (
         os.environ.get("QUERY_OPTIONS") == ""
     ):
@@ -59,9 +53,7 @@ def query_typein():
 
 
 def main():
-    ANILIST_USERNAME = input("Input a username!\n> ")
-
-    # Get user Id based on username
+    ANILIST_USERNAME = input("AniLikerV2 by anas1412 is a fork of AniLiker by taichikuji\nFor more information check the following repo:\nhttps://www.github.com/anas1412\n\nInput an AniList username!\n> ")
 
     query = """
         query ($username: String) {
@@ -75,8 +67,6 @@ def main():
 
     user_id = run_query(query, variables)["User"]["id"]
 
-    # Get latest AniList activities by user Id.
-
     npage = 1
     while npage > 0:
         query = """
@@ -89,14 +79,23 @@ def main():
                     ... on ListActivity {
                       id
                       isLiked
+                      status
+                      media {
+                        title {
+                          userPreferred
+                        }
+                        type
+                      }
                   }
                   ... on TextActivity {
                       id
                       isLiked
-                      }
+                      text
+                  }
                   ... on MessageActivity {
                     id
                     isLiked
+                    message
                   }
                 }
               }
@@ -115,6 +114,17 @@ def main():
 
         for value in activity:
             if not value["isLiked"]:
+                if "status" in value:  # ListActivity
+                    print(f"Activity Type: List Activity - {value['media']['type']}")
+                    print(f"Title: {value['media']['title']['userPreferred']}")
+                    print(f"Status: {value['status']}")
+                elif "text" in value:  # TextActivity
+                    print("Activity Type: Text Activity")
+                    print(f"Text: {value['text'][:50]}...")  # Print first 50 characters
+                elif "message" in value:  # MessageActivity
+                    print("Activity Type: Message Activity")
+                    print(f"Message: {value['message'][:50]}...")  # Print first 50 characters
+                
                 query = """
           mutation ($id: Int) {
             ToggleLikeV2(id: $id, type: ACTIVITY) {
@@ -126,6 +136,9 @@ def main():
 
                 # ToggleLikeV2 runs
                 run_query(query, variables)
+                print(f"Liked activity with ID: {value['id']}")
+                print("--------------------")
+        
         print(f"End of page, waiting 60 seconds to continue\nPage: {npage}")
         if pageInfo:
             npage = npage + 1
