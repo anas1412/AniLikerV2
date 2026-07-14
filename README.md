@@ -1,47 +1,87 @@
-# AniLikerV2: A python autoliker
+# AniLikerV2
 
-<p align="center"><img src="media/logo.webp" width="150px" /><br/>
-<a href="https://replit.com/@OkWeeb/AniLiker"><img src="https://repl.it/badge/github/taichikuji/aniliker" /></a>
-<img src="https://img.shields.io/github/license/taichikuji/AniLiker?color=FF3351&logo=github" />
-<img src="https://img.shields.io/github/commit-activity/w/taichikuji/AniLiker?label=commits&logo=github" />
-</p>
+A web-based tool that bulk-likes activity posts on any AniList profile.
 
-# This project is going to be archived following a warning from AL
+## Quick Start (Local)
 
-This means, so far, no more development of this project. I've come to realize it's just not worth it. I will keep the project up, but I don't think I will continue updating / supporting it.
+### 1. Create an AniList API Client
 
-I know a lot of people really liked this project and even offered new ideas, but this project itself is not ToS in regards of AL, and I know that some people used it for nefarious use.
+1. Go to **https://anilist.co/settings/developer**
+2. Click **Create New Client**
+3. Fill in:
+   - **Name:** anything (e.g. "AniLiker")
+   - **Redirect URL:** `http://127.0.0.1:8080/api/auth/callback`
+4. Click **Save**
+5. Copy the **Client ID** and **Client Secret** you see on the next page
 
-I will continue to learn and develop more using AL's API, but for now, this is going archive. Hope you understand.
+### 2. Set up the project
 
-## What's the point of this project?
+Open a terminal in this folder and run:
 
-This project was a way to learn GraphQL, and also create a project that I've been interested on using and testing for fun.
+```bash
+cp .env.example .env
+```
 
-## What does it do?
+Then edit `.env` and paste your credentials:
 
-This python project asks for a username from AniList and gives likes to every post available. Finishes with an error if gets capped by the API.
+```
+ANILIST_CLIENT_ID=paste_here
+ANILIST_CLIENT_SECRET=paste_here
+BASE_URL=http://127.0.0.1:8080
+```
 
-## How do I make it work if I want to run it locally?
+### 3. Install and run
 
-1. First of all, you need to remove **.example** from **.env.example**.
+```bash
+pip install -r requirements.txt
+python main.py
+```
 
-2. Then you need to create an API Client on Anilist, and then input the data ( **Client ID**, **Client Secret** and **Redirect URI** ) inside the .env file;
+Then open **http://127.0.0.1:8080** in your browser.
 
+### 4. Use it
+
+1. Click **"Login with AniList"** in the top right
+2. Authorize the app on AniList
+3. You'll be redirected back to the app, now logged in
+4. Type any AniList username
+5. Pick which activity types to like (Text, Anime, Manga, Messages)
+6. Click **Start**
+
+The log shows each activity being liked in real time. It pauses 60 seconds between pages to avoid hitting AniList's rate limit.
+
+---
+
+## Deploy to Replit
+
+1. Import this repo into Replit
+2. Go to the **Secrets** tab (lock icon in the left sidebar) and add:
+   - `ANILIST_CLIENT_ID` — your Client ID from step 1
+   - `ANILIST_CLIENT_SECRET` — your Client Secret from step 1
+   - `BASE_URL` — your Replit URL, e.g. `https://my-project.myusername.repl.co`
+3. Go back to **https://anilist.co/settings/developer**, edit your API client, and change the **Redirect URL** to:
    ```
-   ANILIST_TOKEN=""
-   ANILIST_CLIENT_ID=""
-   ANILIST_CLIENT_SECRET=""
-   ANILIST_REDIRECT_URI="https://127.0.0.1"
+   https://my-project.myusername.repl.co/api/auth/callback
    ```
+4. Click **Run**
 
-   If you already have a token, you can ignore the rest.
+---
 
-   If you don't have anything, and you don't know how to retrieve the API Client from AniList, you can follow our **[Wiki!](https://github.com/taichikuji/AniLiker/wiki)**
+## Troubleshooting
 
-3. Now that you have the .env file ready, you just need to run the project! You have two ways;
-   1. You can use pipenv. To do this you just need to install it with `pip install pipenv` and then `pipenv update`. This should prepare a virtual env with all the needed packages.
-      After this you need to run `pipenv run main.py` and it should work just fine!
-   2. Using requirements.txt:
-      Install the required packages with `pip install -r requirements.txt`
-      Run the project with `python main.py` or simply double click on main.py file
+**"ModuleNotFoundError: No module named 'requests'"**
+Run `pip install -r requirements.txt` to install dependencies.
+
+**Login doesn't work / callback error**
+Make sure the Redirect URL in your AniList API client settings exactly matches:
+- For local: `http://127.0.0.1:8080/api/auth/callback`
+- For Replit: `https://your-project.repl.co/api/auth/callback`
+
+**"AniList API credentials not configured"**
+Your `.env` file is missing or empty. Make sure you filled in `ANILIST_CLIENT_ID` and `ANILIST_CLIENT_SECRET`.
+
+---
+
+## License
+
+BSD 3-Clause — see [LICENSE](LICENSE).
